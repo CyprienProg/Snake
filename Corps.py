@@ -1,15 +1,15 @@
 ﻿# Créé par Cyprien, le 11/12/2014 en Python 3.2
 from tkinter import *
 from random import *
-from Map import *
+from GUI import *
 
 class Corps:
-    def __init__(self, canvas, map, pos_x, pos_y, taille, couleur = "green"):
+    def __init__(self, canvas, gui, pos_x, pos_y, taille, couleur = "green"):
         self.taille = taille
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.canvas = canvas
-        self.map = map
+        self.gui = gui
         self.couleur = couleur
         self.id = self.canvas.create_rectangle(0, 0, self.taille, self.taille, fill = self.couleur)
         self.setposition(pos_x, pos_y)
@@ -39,4 +39,4 @@ class Corps:
         self.update()
 
     def update(self):
-        self.map.updateposition(self.pos_x, self.pos_y, self.id, self.taille)
+        self.gui.moveID(self.pos_x, self.pos_y, self.id, self.taille)

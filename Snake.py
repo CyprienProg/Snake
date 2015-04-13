@@ -3,6 +3,19 @@
 from GUI import *
 
 
+controleur = Controleur()
+gui = GUI(controleur)
+gui.run()
 
-x = GUI(800,600)
-x.run()
+
+"""
+controleur = Controleur()
+
+gui = GUI( controleur )
+modele = Modele( controleur )
+
+controleur.link(gui)
+controleur.link(modele)
+
+controleur.run()
+"""
