@@ -5,6 +5,7 @@ from GUI import *
 
 controleur = Controleur()
 gui = GUI(controleur)
+controleur.link(gui)
 gui.run()
 
 
