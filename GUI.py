@@ -5,6 +5,7 @@ from Nourriture import *
 from Serpent import *
 from Corps import *
 from Controleur import *
+from Obstacle import *
 
 class GUI:
     def __init__(self, controleur):
@@ -26,6 +27,9 @@ class GUI:
         self.nourriture.nouvellePosition()
 
         self.id_serpent = self.canvas.create_rectangle(0, 0, self.taille, self.taille, fill = "blue")
+        #self.block_x = self.block.pos_x
+        #self.block_y = self.block.pos_y
+        #self.id_block = self.canvas.create_rectangle(self.block_x, self.block_y, self.block_x + self.taille, self.block_y + self.taille, fill = "black")
 
 
 
@@ -103,6 +107,9 @@ class GUI:
         x1 = pos_x * self.taille + taille + self.taille/2.0 - taille/2.0
         y1 = pos_y * self.taille + taille + self.taille/2.0 - taille/2.0
         self.canvas.coords(id, x0, y0, x1, y1)
+
+
+
 
 
 

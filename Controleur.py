@@ -3,6 +3,7 @@ from random import *
 from Nourrituree import *
 from Serpentt import *
 from Map import *
+from Obstacle import *
 
 
 class Controleur:
@@ -11,6 +12,10 @@ class Controleur:
         self.map = Map(31, 23)
         self.nourriture = Nourrituree()
         self.serpent = Serpentt()
+        self.block = Obstacle()
+
+    def getPositionBlock(self):
+        return self.block.getPosition()
 
     def getLongueurMap(self):
         return self.map.getLongueur()
@@ -28,6 +33,10 @@ class Controleur:
         if nourriture.getPosition() == serpent.getPosition():
             serpent.agrandir(1)
             nourriture.setPosition(getRandom(0, getLongueurMap()), getRandom(0, getLargeurMap()))
+
+    def checkcollision(self):
+        if serpent.getPosition() == block.getPosition():
+            print ("Mort")
 
     def getRandom(self, start, end):
         return randint(start, end)
