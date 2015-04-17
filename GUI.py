@@ -12,7 +12,6 @@ class GUI:
         self.color_obstacle = "black"
 
         self.fenetre = Tk()
-        self.canvas_menu = Canvas(self.fenetre, bg = 'dark gray', height = self.__hauteur, width = self.__largeur)
         self.canvas = Canvas(self.fenetre, bg = 'dark gray', height = self.__hauteur, width = self.__largeur)
         self.canvas.pack(padx = 10, pady = 10)
         self.controleur = controleur
