@@ -20,7 +20,7 @@ class Serpent:
         dernier_corps = self.liste.pop()
         self.liste.insert(0, dernier_corps)
         pos = self.liste[1].getPosition()
-        pos = ((pos[0]+1)%(1+max), pos[1])
+        pos = ((pos[0]+1)%max, pos[1])
         dernier_corps.setPosition(pos[0], pos[1])
 
     def move_up(self, max):
@@ -37,7 +37,7 @@ class Serpent:
         dernier_corps = self.liste.pop()
         self.liste.insert(0, dernier_corps)
         pos = self.liste[1].getPosition()
-        pos = (pos[0], (pos[1]+1)%(max+1))
+        pos = (pos[0], (pos[1]+1)%max)
         dernier_corps.setPosition(pos[0], pos[1])
 
     def getPosition(self):

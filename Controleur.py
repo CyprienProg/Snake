@@ -118,7 +118,7 @@ class Controleur:
 
     def possible_right(self):
         pos = self.serpent.getPosition()
-        pos = ((pos[0]+1) %(self.getLongueurMap()+1), pos[1])
+        pos = ((pos[0]+1) %self.getLongueurMap(), pos[1])
         return not self.checkCollision(pos[0], pos[1])
 
     def possible_up(self):
@@ -128,7 +128,7 @@ class Controleur:
 
     def possible_down(self):
         pos = self.serpent.getPosition()
-        pos = (pos[0], (pos[1]+1)%(self.getHauteurMap()+1) )
+        pos = (pos[0], (pos[1]+1)%self.getHauteurMap() )
         return not self.checkCollision(pos[0], pos[1])
 
     def oriente_serpent_left(self, event):
