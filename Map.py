@@ -52,10 +52,10 @@ class Map:
         hauteur = len(matrice)
         self.setsize(longueur, hauteur)
         nbObstacles = 0
-        for x in range (longueur):
-            for y in range (hauteur):
-                if matrice[x][y] == 1:
-                    self.set_obstacle(x, y, True)
+        for i in range (hauteur):
+            for j in range (longueur):
+                if matrice[i][j] == 1:
+                    self.set_obstacle(j, i, True)
                     nbObstacles += 1
         return nbObstacles
 
