@@ -9,6 +9,7 @@ class GUI:
         self.taille = 25
         self.color_serpent = "green"
         self.color_nourriture = "white"
+        self.color_obstacle = "black"
 
         self.fenetre = Tk()
         self.canvas_menu = Canvas(self.fenetre, bg = 'dark gray', height = self.__hauteur, width = self.__largeur)
@@ -22,6 +23,7 @@ class GUI:
         self.fenetre.bind("<Escape>", self.controleur.switch)
         self.id_nourriture = self.canvas.create_oval(0, 0, self.taille, self.taille, fill = self.color_nourriture)
         self.liste_id_corps =[]
+        self.liste_id_obstacle = []
 
     def movement(self):
         self.controleur.move()
@@ -56,6 +58,17 @@ class GUI:
 
     def switchToMenu(self):
         self.canvas_menu.pack()
+
+    def afficherObstacle(self):
+        liste_pos = self.controleur.getPositionObstacles()
+        for i in range (len(liste_pos)):
+            pos = liste_pos[i]
+            self.moveID(pos[0], pos[1], self.liste_id_obstacle[i], self.taille)
+
+    def ajouterID_obstacles(self, nombre =1):
+        for i in range (nombre):
+            self.liste_id_obstacle.append(self.canvas.create_rectangle(0, 0, self.taille, self.taille, fill = self.color_obstacle))
+        self.afficherObstacle()
 
 
 

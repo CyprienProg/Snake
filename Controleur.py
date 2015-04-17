@@ -3,9 +3,8 @@ from random import *
 from Nourriture import *
 from Serpent import *
 from Map import *
-from Obstacle import *
 from GUI import *
-
+from FileMap import *
 
 class Controleur:
 
@@ -13,10 +12,17 @@ class Controleur:
         self.map = Map(31, 23)
         self.nourriture = Nourriture()
         self.serpent = Serpent()
-        self.block = Obstacle()
         self.oriente = "Down"
-        self.serpent.setPosition(5,5, "Left")
+        self.vie = True
 
+    def initialize(self):
+        self.serpent.setPosition(5,5, "Left")
+        self.gui.ajouterID_corps(3)
+        self.nouvellePositionNourriture()
+        file = FileMap()
+        matrice = file.loadFromFile("map.txt")
+        valeur = self.map.loadMatrice(matrice)
+        self.gui.ajouterID_obstacles(valeur)
 
     def getPositionBlock(self):
         return self.block.getPosition()
@@ -24,8 +30,8 @@ class Controleur:
     def getLongueurMap(self):
         return self.map.getLongueur()
 
-    def getLargeurMap(self):
-        return self.map.getLargeur()
+    def getHauteurMap(self):
+        return self.map.getHauteur()
 
     def getPositionSerpent(self):
         return self.serpent.getPosition()
@@ -39,30 +45,28 @@ class Controleur:
             self.gui.ajouterID_corps()
             self.nouvellePositionNourriture()
 
-    def checkCollision(self):
-        if self.serpent.getPosition() == self.block.getPosition():
-            print ("Mort")
+
 
     def getRandom(self, start, end):
         return randint(start, end)
 
     def getRandomFree(self):        #Trop aléatoire, DANGER !
-        pos = (self.getRandom(0, self.getLongueurMap()), self.getRandom(0, self.getLargeurMap()))
-        while self.checkCollision_corps(pos[0], pos[1]):
-            pos = (self.getRandom(0, self.getLongueurMap()), self.getRandom(0, self.getLargeurMap()))
+        pos = (self.getRandom(0, self.getLongueurMap()), self.getRandom(0, self.getHauteurMap()))
+        while self.checkCollision(pos[0], pos[1]):
+            pos = (self.getRandom(0, self.getLongueurMap()), self.getRandom(0, self.getHauteurMap()))
         return pos
 
     def serpent_goLeft(self):
-        self.serpent.move_left()
+        self.serpent.move_left(self.getLongueurMap())
 
     def serpent_goRight(self):
-        self.serpent.move_right()
+        self.serpent.move_right(self.getLongueurMap())
 
     def serpent_goUp(self):
-        self.serpent.move_up()
+        self.serpent.move_up(self.getHauteurMap())
 
     def serpent_goDown(self):
-        self.serpent.move_down()
+        self.serpent.move_down(self.getHauteurMap())
 
     def nouvellePositionNourriture(self):
         pos = self.getRandomFree()
@@ -71,57 +75,61 @@ class Controleur:
 
     def link(self, gui):
         self.gui = gui
-        self.gui.ajouterID_corps(3)
-        self.nouvellePositionNourriture()
+        self.initialize()
+
+
 
     def getListeCorpsSerpent(self):
         return self.serpent.getListeCorps()
 
 
     def move (self):
-        if self.oriente == "Left":
-            if self.possible_left():
-                self.serpent_goLeft()
-            else:
-                print("Mort")
-        elif self.oriente == "Right":
-            if self.possible_right():
-                self.serpent_goRight()
-            else :
-                print("Mort")
-        elif self.oriente == "Up":
-            if self.possible_up():
-                self.serpent_goUp()
-            else :
-                print("Mort")
-        elif self.oriente == "Down":
-            if self.possible_down():
-                self.serpent_goDown()
-            else :
-                print("Mort")
-        self.lock = False
-        self.gui.afficherSerpent()
-        self.gui.afficherNourriture()
+        if self.vie:
+            if self.oriente == "Left":
+                if self.possible_left():
+                    self.serpent_goLeft()
+                else:
+                    self.serpentMort()
+            elif self.oriente == "Right":
+                if self.possible_right():
+                    self.serpent_goRight()
+                else :
+                    self.serpentMort()
+            elif self.oriente == "Up":
+                if self.possible_up():
+                    self.serpent_goUp()
+                else :
+                    self.serpentMort()
+            elif self.oriente == "Down":
+                if self.possible_down():
+                    self.serpent_goDown()
+                else :
+                    self.serpentMort()
+            self.lock = False
+            self.gui.afficherSerpent()
+            self.gui.afficherNourriture()
+        else:
+            print("Mort")
 
     def possible_left(self):
         pos = self.serpent.getPosition()
         pos = (pos[0]-1, pos[1])
-        return not self.checkCollision_corps(pos[0], pos[1])
+        return not self.checkCollision(pos[0], pos[1])
 
     def possible_right(self):
         pos = self.serpent.getPosition()
-        pos = (pos[0]+1, pos[1])
-        return not self.checkCollision_corps(pos[0], pos[1])
+        pos = ((pos[0]+1) %(self.getLongueurMap()+1), pos[1])
+        return not self.checkCollision(pos[0], pos[1])
 
     def possible_up(self):
         pos = self.serpent.getPosition()
         pos = (pos[0], pos[1]-1 )
-        return not self.checkCollision_corps(pos[0], pos[1]) #and not checkCollision_block(pos[0], pos[1])
+        return not self.checkCollision(pos[0], pos[1])
 
     def possible_down(self):
         pos = self.serpent.getPosition()
-        pos = (pos[0], pos[1]+1 )
-        return not self.checkCollision_corps(pos[0], pos[1])
+        pos = (pos[0], (pos[1]+1)%(self.getHauteurMap()+1) )
+        return not self.checkCollision(pos[0], pos[1])
 
     def oriente_serpent_left(self, event):
         if self.oriente != "Right" and self.lock == False and self.oriente != "Left":
@@ -151,6 +159,25 @@ class Controleur:
 
     def switch(self, event):
         self.gui.switchToMenu()
+
+    def getPositionObstacles(self):
+        liste_pos = self.map.getPositionObstacles()
+        return liste_pos
+
+    def ajouterObstacles(self, x, y, valeur):
+        self.map.set_obstacle(x, y, valeur)
+        self.gui.ajouterID_obstacles()
+
+
+    def checkCollision_obstacles(self, x, y):
+        return self.map.obstacles_contains(x, y)
+
+    def checkCollision(self, x, y):
+        return self.checkCollision_corps(x, y) or self.checkCollision_obstacles(x, y)
+
+    def serpentMort(self):
+        self.vie = False
+
 
 
 
