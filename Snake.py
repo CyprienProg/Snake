@@ -1,13 +1,10 @@
 ﻿# Créé par Cyprien, le 11/12/2014 en Python 3.2
+from Menu import *
 
-from GUI import *
-
-
-controleur = Controleur()
-gui = GUI(controleur)
-controleur.link(gui)
-gui.run()
-
+if __name__ == "__main__":
+    root=Tk()
+    menu = Menu(root)
+    menu.mainloop()
 
 """
 controleur = Controleur()

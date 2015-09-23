@@ -6,7 +6,7 @@ class GUI:
     def __init__(self, controleur):
         self.__hauteur = 600
         self.__largeur = 800
-        self.taille = 25
+        self.taille = 10
         self.color_serpent = "green"
         self.color_nourriture = "white"
         self.color_obstacle = "black"

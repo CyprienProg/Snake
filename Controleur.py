@@ -51,7 +51,7 @@ class Controleur:
         return randint(start, end)
 
     def getRandomFree(self):        #Trop aléatoire, DANGER !
-        pos = (self.getRandom(0, self.getLongueurMap()), self.getRandom(0, self.getHauteurMap()))
+        pos = (self.getRandom(0, self.getLongueurMap()-1), self.getRandom(0, self.getHauteurMap()-1))
         while self.checkCollision(pos[0], pos[1]):
             pos = (self.getRandom(0, self.getLongueurMap()), self.getRandom(0, self.getHauteurMap()))
         return pos
