@@ -16,11 +16,13 @@ class Menu(Canvas):
         self.bou_opt.pack()
         self.bou_edit.pack(side = BOTTOM)
 
-    def play(self):
+    def play(self):                             #solo
+        #serveur = Serveur()
+        #joueur = Client('localhost')
         controleur = Controleur()
         gui = GUI(controleur)
         controleur.link(gui)
-        self.destroy()
+        #self.destroy()
         gui.run()
 
     def option(self):

@@ -105,7 +105,6 @@ class Controleur:
                     self.serpent_goDown()
                 else :
                     self.serpentMort()
-            self.lock = False
             self.gui.afficherSerpent()
             self.gui.afficherNourriture()
         else:
@@ -132,24 +131,20 @@ class Controleur:
         return not self.checkCollision(pos[0], pos[1])
 
     def oriente_serpent_left(self, event):
-        if self.oriente != "Right" and self.lock == False and self.oriente != "Left":
+        if self.oriente != "Right":
             self.set_var("Left")
-            self.lock = True
 
     def oriente_serpent_right(self, event):
-        if self.oriente != "Left" and self.lock == False and self.oriente != "Right":
+        if self.oriente != "Left":
             self.set_var("Right")
-            self.lock = True
 
     def oriente_serpent_up(self, event):
-        if self.oriente != "Down" and self.lock == False and self.oriente != "Up":
+        if self.oriente != "Down":
             self.set_var("Up")
-            self.lock = True
 
     def oriente_serpent_down(self, event):
-        if self.oriente != "Up" and self.lock == False and self.oriente != "Down":
+        if self.oriente != "Up":
             self.set_var("Down")
-            self.lock = True
 
     def set_var(self, var):
         self.oriente = var
