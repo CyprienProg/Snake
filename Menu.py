@@ -1,5 +1,6 @@
 ﻿# Créé par Haccuria, le 17/04/2015 en Python 3.2
 from GUI import *
+from Game import *
 
 class Menu(Canvas):
     def __init__(self, master=None):
@@ -15,15 +16,19 @@ class Menu(Canvas):
         self.bou_play.pack(side = TOP)
         self.bou_opt.pack()
         self.bou_edit.pack(side = BOTTOM)
+        self.bou_play.bi
 
-    def play(self):                             #solo
+#    def play(self):                             #solo
         #serveur = Serveur()
         #joueur = Client('localhost')
-        controleur = Controleur()
-        gui = GUI(controleur)
-        controleur.link(gui)
+        #controleur = Controleur()
+        #gui = GUI(controleur)
+        #controleur.link(gui)
         #self.destroy()
-        gui.run()
+        #gui.run()
+
+    def play(self):
+        game = Game()
 
     def option(self):
         print("Option")

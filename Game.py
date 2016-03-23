@@ -1,6 +1,6 @@
 ﻿# Créé par Haccuria, le 06/12/2015 en Python 3.2
 from Client import *
-class Jeu:
+class Game:
     def __init__(self, client):
         client = Client()
 
