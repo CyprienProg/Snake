@@ -2,20 +2,20 @@
 import socket, sys, threading
 
 class Client(threading.Thread):
-    def __init__(self, ip, port):
+    def __init__(self, ip, port, name):
         threading.Thread.__init__(self)
-        self.ip = ip
-        self.port = port
+        self.ip = str(ip)
+        self.port = int(port)
+        self.name = str(name)
         
 
-    def run(self):
+    def connect(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.socket.connect((self.ip, self.port))           #localhost = 127.0.0.1
-            print("Connexion réussie")
+            return True
         except socket.error:
-            print ("La connexion a échouée.")
-            sys.exit()
+            return False
 
 
 
