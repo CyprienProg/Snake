@@ -1,6 +1,11 @@
 # Créé par Haccuria, le 23/09/2015 en Python 3.2
 import socket, sys, threading
 from Interface import *
+import json
+from FileMap import *
+import sys
+sys.path.append("../Commun")
+from Map import *
 
 class Serveur(threading.Thread):
     def __init__(self, interface):
@@ -8,6 +13,11 @@ class Serveur(threading.Thread):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sockets = {}
         self.interface = interface
+
+        self.map = Map(1,1)
+        file = FileMap()
+        matrice = file.loadFromFile("map.txt")
+        valeur = self.map.loadMatrice(matrice)
 
     def run(self):
         try:
@@ -41,7 +51,12 @@ class Serveur(threading.Thread):
         self.socket.close()
 
     def analyse(self, name, message):
-        player = self.players[name]
+        message = json.loads(message)
+        if message["type"] == "load map":
+            obstacles = self.map.getPositionObstacles()
+            data = {"width" : self.map.getLongueur(), "height": self.map.getHauteur(), "numbers":len(obstacles), "obstacles":obstacles}
+            self.send(name, "load map", data)
+        '''player = self.players[name]
         if message == "up":
             player.set_movment_up()
         elif message == "down":
@@ -53,8 +68,15 @@ class Serveur(threading.Thread):
         message = nom + " " + message
         for cle in self.sockets:
             if cle != nom:
-                self.sockets[cle].socket.send(message.encode("Utf8"))
+                self.sockets[cle].socket.send(message.encode("Utf8"))'''
 
+    def send(self, name, types, data = ""):
+        message = {}
+        message["type"] = types
+        message["data"] = data
+        message = json.dumps(message)
+        self.sockets[name].socket.send(message.encode("Utf8"))
+        
     def send_pos(self, pos):
         print("")
 

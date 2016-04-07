@@ -1,12 +1,15 @@
 # Créé par Haccuria, le 23/09/2015 en Python 3.2
 import socket, sys, threading
+import json
+
 
 class Client(threading.Thread):
-    def __init__(self, ip, port, name):
+    def __init__(self, ip, port, name, controller):
         threading.Thread.__init__(self)
         self.ip = str(ip)
         self.port = int(port)
         self.name = str(name)
+        self.controller = controller
         
 
     def connect(self):
@@ -16,14 +19,35 @@ class Client(threading.Thread):
             return True
         except socket.error:
             return False
+    def get_map(self):
+        self.send("load map")
 
+    def run(self):
+        stop = False
+        while not stop:
+            try :
+                message = self.socket.recv(1024).decode("Utf8")
+                if not message or message.upper() == "FIN":
+                    break
+                else:
+                    self.analyse(message)
+            except socket.error:
+                stop = True
+                print("Le client est déconnecté")
 
+    def analyse(self, message):
+        message = json.loads(message)
 
+        if message["type"] == "load map":
+            self.controller.frames["Jeu"].set_map( message["data"] )
 
-
-
-
-
+    def send(self, types, data = ""):
+        message = {}
+        message["type"] = types
+        message["data"] = data
+        message = json.dumps(message)
+        self.socket.send(message.encode("Utf8"))
+        
 
 
 

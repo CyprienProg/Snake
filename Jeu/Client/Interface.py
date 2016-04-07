@@ -89,9 +89,10 @@ class LogIn(Frame):
     def connexion (self, event=None):
         self.controller.show_frame("Chargement")
         self.update()
-        self.controller.client = Client(self.entryIP.get(), self.entryPort.get(), self.entryName.get())
+        self.controller.client = Client(self.entryIP.get(), self.entryPort.get(), self.entryName.get(), self.controller)
         if(self.controller.client.connect()):
             self.controller.show_frame("Jeu")
+            self.controller.client.start()
             self.controller.frames["Jeu"].initialisation()
         else:
             self.controller.client = None
