@@ -1,5 +1,6 @@
 ﻿# Créé par Cyprien, le 11/12/2014 en Python 3.2
 from Case import *
+from random import *
 
 class Map:
 
@@ -10,6 +11,41 @@ class Map:
         self.map =[]
         self.setsize(longueur, hauteur)
 
+    def getRandomFree(self, space=0):
+        found = False
+        while not found:
+            x = randint(0, self.longueur)
+            y = randint(0, self.hauteur)
+            if self.__isFree(x, y, space):
+                found = True
+        return (x, y)
+    
+    def __isFree(self,x, y, space):
+        for i in range(x, (x+space)%self.longueur):
+            if self.is_obstacle(self.correctCoord(i, y)):
+                return False
+        for i in range(x-space, x):
+            if self.is_obstacle(self.correctCoord(i, y)):
+                return False
+        for i in range(y, y+space):
+            if self.is_obstacle(self.correctCoord(x, i)):
+                return False
+        for i in range(y-space, y):
+            if self.is_obstacle(self.correctCoord(x, i)):
+                return False
+        return True
+
+    def correctCoord(self, x, y):
+        if x>=0:
+            x = x % self.longueur
+        else:
+            x = self.longueur + x
+        if y>=0:
+            y = y % self.hauteur
+        else:
+            y = self.hauteur + y
+        return (x,y)
+            
 
     def setsize(self, longueur, hauteur):
         self.longueur = longueur
@@ -37,8 +73,8 @@ class Map:
         else:
             self.liste_obstacles.remove((x, y))
 
-    def is_obstacle(self):
-        case = self.get(x, y)
+    def is_obstacle(self, pos):
+        case = self.get(pos[0], pos[1])
         return case.get_obstacle()
 
     def getPositionObstacles(self):

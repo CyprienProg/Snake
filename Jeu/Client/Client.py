@@ -10,6 +10,7 @@ class Client(threading.Thread):
         self.port = int(port)
         self.name = str(name)
         self.controller = controller
+        self.running = False
         
 
     def connect(self):
@@ -23,16 +24,16 @@ class Client(threading.Thread):
         self.send("load map")
 
     def run(self):
-        stop = False
-        while not stop:
+        self.running = True
+        while self.running:
             try :
                 message = self.socket.recv(1024).decode("Utf8")
                 if not message or message.upper() == "FIN":
-                    break
+                    self.stop()
                 else:
                     self.analyse(message)
             except socket.error:
-                stop = True
+                self.stop()
                 print("Le client est déconnecté")
 
     def analyse(self, message):
@@ -40,6 +41,8 @@ class Client(threading.Thread):
 
         if message["type"] == "load map":
             self.controller.frames["Jeu"].set_map( message["data"] )
+        else:
+            print("Type inconnu", message["type"], message["data"])
 
     def send(self, types, data = ""):
         message = {}
@@ -49,8 +52,8 @@ class Client(threading.Thread):
         self.socket.send(message.encode("Utf8"))
         
 
-
-
+    def stop(self):
+        self.running = False
 
 
 

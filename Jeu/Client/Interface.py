@@ -30,11 +30,17 @@ class Interface(Tk):
             frame.grid(row=0, column=0, sticky="nsew")
 
         self.show_frame("Menu")
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     def show_frame(self, page_name):
         '''Show a frame for the given page name'''
         frame = self.frames[page_name]
         frame.tkraise()
+
+    def on_closing(self):
+        if self.client != None:
+            self.client.stop()
+        self.destroy()
 
 
 class Menu(Frame):
